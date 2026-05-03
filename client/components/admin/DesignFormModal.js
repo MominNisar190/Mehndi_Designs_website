@@ -40,11 +40,21 @@ export default function DesignFormModal({ design, onClose, onSaved }) {
     setLoading(true);
     try {
       const fd = new FormData();
-      // Add price=0 as placeholder since model still has it
       fd.append('price', 0);
+
+      // Handle tags — convert comma string to JSON array
+      const tagsArray = formData.tags
+        ? formData.tags.split(',').map((t) => t.trim()).filter(Boolean)
+        : [];
+
       Object.entries(formData).forEach(([k, v]) => {
+        if (k === 'tags') return; // skip — handle separately
         if (v !== undefined && v !== null) fd.append(k, v);
       });
+
+      // Send tags as JSON string
+      fd.append('tags', JSON.stringify(tagsArray));
+
       imageFiles.forEach((file) => fd.append('images', file));
 
       if (design) {

@@ -2,7 +2,6 @@ const asyncHandler = require('express-async-handler');
 const { validationResult } = require('express-validator');
 const Booking = require('../models/Booking');
 const Design = require('../models/Design');
-const { sendBookingConfirmation, sendBookingStatusUpdate } = require('../services/emailService');
 
 // @desc    Create booking
 // @route   POST /api/bookings
