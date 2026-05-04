@@ -21,7 +21,7 @@ export default function DesignFormModal({ design, onClose, onSaved }) {
           title: design.title,
           category: design.category,
           description: design.description,
-          timeRequired: design.timeRequired,
+          timeRequired: design.timeRequired ? (design.timeRequired / 60).toFixed(1) : '',
           difficulty: design.difficulty,
           tags: design.tags?.join(', '),
           isFeatured: design.isFeatured,
@@ -49,6 +49,11 @@ export default function DesignFormModal({ design, onClose, onSaved }) {
 
       Object.entries(formData).forEach(([k, v]) => {
         if (k === 'tags') return; // skip — handle separately
+        if (k === 'timeRequired') {
+          // Convert hours to minutes
+          fd.append('timeRequired', Math.round(parseFloat(v) * 60));
+          return;
+        }
         if (v !== undefined && v !== null) fd.append(k, v);
       });
 
@@ -160,13 +165,15 @@ export default function DesignFormModal({ design, onClose, onSaved }) {
               {/* Time */}
               <div className="sm:col-span-2">
                 <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">
-                  Time Required (minutes)
+                  Time Required (Hours)
                 </label>
                 <input
                   type="number"
-                  {...register('timeRequired', { required: 'Time is required', min: 15 })}
+                  step="0.5"
+                  min="0.5"
+                  {...register('timeRequired', { required: 'Time is required', min: 0.5 })}
                   className="input-dark"
-                  placeholder="60"
+                  placeholder="e.g. 1.5 (means 1 hour 30 min)"
                 />
                 {errors.timeRequired && <p className="text-red-400 text-xs mt-1">{errors.timeRequired.message}</p>}
               </div>
