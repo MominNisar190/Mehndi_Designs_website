@@ -88,6 +88,7 @@ designSchema.pre('save', function (next) {
 
 // Virtual for primary image
 designSchema.virtual('primaryImage').get(function () {
+  if (!this.images || !this.images.length) return '';
   const primary = this.images.find((img) => img.isPrimary);
   return primary ? primary.url : this.images[0]?.url || '';
 });

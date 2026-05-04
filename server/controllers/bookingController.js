@@ -105,18 +105,20 @@ const getBooking = asyncHandler(async (req, res) => {
 const updateBookingStatus = asyncHandler(async (req, res) => {
   const { status, adminNotes, cancellationReason } = req.body;
 
-  const booking = await Booking.findById(req.params.id)
-    .populate('design', 'title');
+  const updateData = { status };
+  if (adminNotes) updateData.adminNotes = adminNotes;
+  if (cancellationReason) updateData.cancellationReason = cancellationReason;
+
+  const booking = await Booking.findByIdAndUpdate(
+    req.params.id,
+    updateData,
+    { new: true, runValidators: false }
+  ).populate('design', 'title');
 
   if (!booking) {
     res.status(404);
     throw new Error('Booking not found');
   }
-
-  booking.status = status;
-  if (adminNotes) booking.adminNotes = adminNotes;
-  if (cancellationReason) booking.cancellationReason = cancellationReason;
-  await booking.save();
 
   res.json({ success: true, data: booking });
 });
