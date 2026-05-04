@@ -118,21 +118,19 @@ export default function AdminBookingsPage() {
               transition={{ delay: i * 0.04 }}
               className="card p-4"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex flex-col gap-4">
 
                 {/* Customer */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-full bg-gold-500/20 border border-gold-500/30 flex items-center justify-center shrink-0">
-                      <span className="text-gold-500 text-xs font-semibold">
-                        {booking.customerName?.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <p className="text-white font-medium text-sm">{booking.customerName}</p>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gold-500/20 border border-gold-500/30 flex items-center justify-center shrink-0">
+                    <span className="text-gold-500 text-xs font-semibold">
+                      {booking.customerName?.charAt(0).toUpperCase()}
+                    </span>
                   </div>
-                  <div className="flex flex-wrap gap-3 ml-9">
-                    <a
-                      href={`https://wa.me/${booking.customerPhone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-medium text-sm">{booking.customerName}</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <a href={`https://wa.me/${booking.customerPhone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
                         booking.status === 'confirmed'
                           ? `Assalamu Alaikum ${booking.customerName}! 🌸\n\nYour mehndi appointment has been *CONFIRMED* ✅\n\n📅 Date: ${new Date(booking.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\n⏰ Time: ${booking.timeSlot}\n💎 Design: ${booking.design?.title || 'Selected Design'}\n\nWe look forward to seeing you!\n\n✨ *Saniya Mehndi Designs*`
                           : booking.status === 'completed'
@@ -140,76 +138,61 @@ export default function AdminBookingsPage() {
                           : booking.status === 'cancelled'
                           ? `Assalamu Alaikum ${booking.customerName},\n\nWe regret to inform you that your booking has been *cancelled*.\n\nPlease contact us to reschedule.\n📞 +91 93590 16366\n\n✨ *Saniya Mehndi Designs*`
                           : `Assalamu Alaikum ${booking.customerName}! 🌸\n\nWe have received your booking request.\n\n📅 Date: ${new Date(booking.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\n⏰ Time: ${booking.timeSlot}\n💎 Design: ${booking.design?.title || 'Selected Design'}\n\nWe will confirm your appointment shortly. 🙏\n\n✨ *Saniya Mehndi Designs*`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-green-400 hover:text-green-300 text-xs transition-colors"
-                    >
-                      <Phone size={10} /> {booking.customerPhone}
-                    </a>
-                    {booking.customerEmail && (
-                      <a
-                        href={`mailto:${booking.customerEmail}?subject=${encodeURIComponent('Your Mehndi Appointment — Saniya Mehndi Designs')}&body=${encodeURIComponent(
-                          booking.status === 'confirmed'
-                            ? `Dear ${booking.customerName},\n\nYour mehndi appointment has been CONFIRMED.\n\nAppointment Details:\nDate: ${new Date(booking.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\nTime: ${booking.timeSlot}\nDesign: ${booking.design?.title || 'Selected Design'}\n\nWe look forward to seeing you!\n\nWarm regards,\nSaniya Mehndi Designs\n+91 93590 16366`
-                            : `Dear ${booking.customerName},\n\nThank you for booking with Saniya Mehndi Designs.\n\nAppointment Details:\nDate: ${new Date(booking.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\nTime: ${booking.timeSlot}\nDesign: ${booking.design?.title || 'Selected Design'}\nStatus: ${booking.status.toUpperCase()}\n\nFor any queries, feel free to contact us.\n\nWarm regards,\nSaniya Mehndi Designs\n+91 93590 16366`
-                        )}`}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                      >
-                        <Mail size={10} /> {booking.customerEmail}
+                      )}`} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-green-400 hover:text-green-300 text-xs transition-colors">
+                        <Phone size={10} /> {booking.customerPhone}
                       </a>
+                      {booking.customerEmail && (
+                        <a href={`mailto:${booking.customerEmail}?subject=${encodeURIComponent('Your Mehndi Appointment — Saniya Mehndi Designs')}&body=${encodeURIComponent(
+                          `Dear ${booking.customerName},\n\nAppointment Details:\nDate: ${new Date(booking.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\nTime: ${booking.timeSlot}\nDesign: ${booking.design?.title || 'Selected Design'}\nStatus: ${booking.status.toUpperCase()}\n\nWarm regards,\nSaniya Mehndi Designs\n+91 93590 16366`
+                        )}`}
+                          className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors">
+                          <Mail size={10} /> {booking.customerEmail}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Design + Date + Status row */}
+                <div className="flex flex-wrap items-center gap-3 ml-11">
+                  {/* Design */}
+                  <div className="flex items-center gap-2">
+                    {booking.design?.images?.[0] && (
+                      <img src={booking.design.images[0].url} alt="" className="w-8 h-8 rounded-sm object-cover shrink-0" />
                     )}
+                    <p className="text-gray-300 text-xs">{booking.design?.title || '—'}</p>
                   </div>
-                </div>
 
-                {/* Design */}
-                <div className="sm:w-40 flex items-center gap-2 shrink-0">
-                  {booking.design?.images?.[0] && (
-                    <img
-                      src={booking.design.images[0].url}
-                      alt=""
-                      className="w-9 h-9 rounded-sm object-cover shrink-0"
-                    />
-                  )}
-                  <p className="text-gray-300 text-xs line-clamp-2">{booking.design?.title || '—'}</p>
-                </div>
-
-                {/* Date & Time */}
-                <div className="sm:w-32 shrink-0">
-                  <div className="flex items-center gap-1.5 text-gray-300 text-xs mb-1">
-                    <Calendar size={11} className="text-gold-500" />
+                  {/* Date */}
+                  <div className="flex items-center gap-1.5 text-gray-400 text-xs">
+                    <Calendar size={10} className="text-gold-500" />
                     {formatDate(booking.bookingDate)}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-gray-500 text-xs">
-                    <Clock size={11} className="text-gold-500" />
+                    <Clock size={10} className="text-gold-500 ml-1" />
                     {booking.timeSlot}
                   </div>
-                </div>
 
-                {/* Status badge */}
-                <div className="sm:w-28 shrink-0">
-                  <span className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border font-medium ${getStatusColor(booking.status)}`}>
+                  {/* Status */}
+                  <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium ${getStatusColor(booking.status)}`}>
                     {statusIcons[booking.status]}
                     {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                   </span>
                 </div>
 
-                {/* Action */}
-                <div className="flex items-center gap-2 shrink-0">
+                {/* Actions */}
+                <div className="flex items-center gap-2 ml-11">
                   <select
                     value={booking.status}
                     onChange={(e) => handleStatusChange(booking._id, e.target.value)}
-                    className="bg-[#1a1a1a] border border-[#2a2a2a] text-gray-300 text-xs px-3 py-2 rounded-sm focus:outline-none focus:border-gold-500 cursor-pointer"
+                    className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-gray-300 text-xs px-2 py-2 rounded-sm focus:outline-none focus:border-gold-500 cursor-pointer"
                   >
                     {statusOptions.map((s) => (
-                      <option key={s} value={s}>
-                        {s.charAt(0).toUpperCase() + s.slice(1)}
-                      </option>
+                      <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
                     ))}
                   </select>
                   <button
                     onClick={() => handleDelete(booking._id)}
-                    className="p-2 border border-[#2a2a2a] text-red-400 hover:bg-red-400/10 hover:border-red-400/50 rounded-sm transition-colors"
+                    className="p-2 border border-[#2a2a2a] text-red-400 hover:bg-red-400/10 hover:border-red-400/50 rounded-sm transition-colors shrink-0"
                     title="Delete booking"
                   >
                     <Trash2 size={14} />
