@@ -29,7 +29,8 @@ export default function Footer() {
                 { href: '/', label: 'Home' },
                 { href: '/gallery', label: 'Gallery' },
                 { href: '/booking', label: 'Book Now' },
-                { href: '/account', label: 'My Account' },
+                { href: '/about', label: 'About Us' },
+                { href: '/contact', label: 'Contact' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -82,6 +83,12 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Saniya Mehndi Designs. All rights reserved.
           </p>
           <div className="flex gap-6">
+            <Link href="/about" className="text-gray-600 text-xs hover:text-gold-500 transition-colors">
+              About Us
+            </Link>
+            <Link href="/contact" className="text-gray-600 text-xs hover:text-gold-500 transition-colors">
+              Contact
+            </Link>
             <Link href="/privacy" className="text-gray-600 text-xs hover:text-gold-500 transition-colors">
               Privacy Policy
             </Link>
